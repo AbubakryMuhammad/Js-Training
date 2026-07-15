@@ -35,7 +35,7 @@ if (hasReservation) {
     console.log("Reservation confirmed.");
 } else {
     console.log("You do not have a reservation.");
-}
+} 
 
 // Personalised message
 if (isOldEnough && canAfford && hasReservation) {
