@@ -6,8 +6,8 @@ let hasReservation = prompt("Do you have a reservation? (yes/no)").toLowerCase()
 
 // Dish prices
 let jollofRice = 5000;
-let grilledChicken = 8000;
-let seafoodPlatter = 12000;
+let grilledChicken = 8000; 
+let seafoodPlatter = 12000; 
 
 // Check if customer is old enough
 let isOldEnough = customerAge >= 18;

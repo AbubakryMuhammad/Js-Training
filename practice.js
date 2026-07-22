@@ -7,7 +7,7 @@ console.log(myName);
 console.log(myAge);
 console.log(myCity);
 
-myScore = 100
+myScore = 100 
 console.log(myScore);
 
 console.log("My name is:", myName,",", "I am", myAge, "I live in", myCity, "and my Mathematics score is", myScore);
