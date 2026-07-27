@@ -1,7 +1,7 @@
 console.log('Welcome to Cre8tif Lens')
 
 //READING
-const shootName = document.querySelector("#shoot-name");
+const shootName = document.querySelector("#shootname");
 console.log(shootName.textContent);
 
 const price = document.querySelector("#price");
@@ -14,3 +14,7 @@ console.log(hour.textContent);
 shootName.textContent = "Traditional Wedding";
 price.innerHTML = "<strong> $150 </strong>";
 hour.innerHTML = "<em> 5 hours </em>";
+
+shootname.style.color = "#ff0000";
+price.style.fontSize = "1.5rem";
+hour.style.backgroundColor = "#00ffff";
