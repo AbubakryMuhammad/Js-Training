@@ -6,15 +6,23 @@
     <title>Wedding Shoot</title>
 </head>
 <body>
-<!--
-    <p>JavaScript Page</p>
+    <!-- <p>JavaScript Page</p>
     <script src="loop.js">
         //console.log("Hello Champ!");
-    </script>
--->
-    <h1 id="shootname" style="color: purple;">White Wedding</h1>
+    </script> -->
+<style>
+    .highlight{
+        color: red;
+        background-color: blue;
+    }
+</style>
+
+    <h1 id="shootname">White Wedding</h1>
     <p id="price" style="color: blue; font-size: 1rem;">$100</p>
     <p id="hours" style="background-color: rgb(186, 226, 226);">4 hours</p>
+    <button onclick="addHighlight()">Add Highlight</button>
+    <button onclick="removeHighlight()">Remove  Highlight</button>
+    <button onclick="toggleHighlight()">Toggle  Highlight</button>
 
     <script src="dom.js"></script>
 </body>
