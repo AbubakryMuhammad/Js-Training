@@ -27,3 +27,18 @@ console.log("10% Service charge:", serviceCharge);
 
 // Log the final amount
 console.log("Total with service charge:", totalWithServiceCharge);
+
+
+const age = 20;
+const hasid = true;
+const isHeOnUniform = true;
+
+if (age>= 18 && !hasid){
+    console.log("You're an adult");
+}
+else if(isHeOnUniform){
+    console.log("You're a Corper")
+}
+else{
+   console.log("You're an Imposter");
+}
