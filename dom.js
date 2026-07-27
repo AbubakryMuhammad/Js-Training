@@ -1,33 +1,33 @@
-console.log('Welcome to Cre8tif Lens')
+console.log('Welcome to Asa Kitchen')
 
 //READING
-const shootName = document.querySelector("#shootname");
-console.log(shootName.textContent);
+const dishname = document.querySelector("#dishname");
+console.log(dishname.textContent);
 
 const price = document.querySelector("#price");
 console.log(price.textContent);
 
-const hour = document.querySelector("#hours");
-console.log(hour.textContent);
+const rating = document.querySelector("#rating");
+console.log(rating.textContent);
 
 //CHANGING
-shootName.textContent = "Traditional Wedding";
-price.innerHTML = "<strong> $150 </strong>";
-hour.innerHTML = "<em> 5 hours </em>";
+dishname.textContent = "Chicken Burger";
+price.innerHTML = "<strong> $50 </strong>";
+rating.innerHTML = "<em> 4 stars </em>";
 
-//shootname.style.color = "#ff0000";
+//dishname.style.color = "#ff0000";
 price.style.fontSize = "1.5rem";
-hour.style.backgroundColor = "#00ffff";
+rating.style.backgroundColor = "#00ffff";
 
 function addHighlight (){
-    shootName.classList.add("highlight");
+    dishname.classList.add("highlight");
 } 
 
 function removeHighlight (){
-    shootName.classList.remove("highlight");
+    dishname.classList.remove("highlight");
 }
 
 function toggleHighlight (){
-    shootName.classList.toggle("highlight");
+    dishname.classList.toggle("highlight");
 }
 
