@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopEasy | E-Commerce Store</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+
+        <div class="logo">
+            <h2>Shop<span>Easy</span></h2>
+        </div>
+
+        <div class="cart-icon">
+
+            <i class="fa-solid fa-cart-shopping"></i>
+
+            <span>Cart</span>
+
+            <div class="cart-count" id="cart-count">
+                0
+            </div>
+
+        </div>
+
+    </header>
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h1>
+                Fresh <span>Arrivals</span>
+            </h1>
+
+            <p>
+                Pick your favourites and add them to your cart.
+            </p>
+
+        </div>
+
+    </section>
+
+    <main class="container">
+
+        <section class="products">
+
+            <h1>All Products</h1>
+
+            <div class="product-grid" id="product-grid">
+            </div>
+
+        </section>
+
+        <aside class="cart">
+
+            <div class="cart-header">
+
+                <h2>Your Cart</h2>
+
+                <span id="item-count">0 Items</span>
+
+            </div>
+
+            <div class="cart-body">
+
+                <div class="empty-cart" id="empty-cart">
+
+                    <i class="fa-solid fa-cart-shopping"></i>
+
+                    <p>Your cart is empty.</p>
+
+                    <span>Add some products!</span>
+
+                </div>
+
+                <div id="cart-items">
+
+                </div>
+
+            </div>
+
+            <div class="cart-footer">
+
+                <div class="total">
+
+                    <h3>Total</h3>
+
+                    <h2 id="total-price">₦0</h2>
+
+                </div>
+
+                <button class="checkout-btn">Checkout</button>
+
+                <button class="clear-btn" id="clear-cart">Clear Cart</button>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
