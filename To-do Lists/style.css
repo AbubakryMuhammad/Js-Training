@@ -234,7 +234,7 @@ h1 {
     padding: 20px;
 }
 
-/* Mobile */
+
 @media (max-width: 768px) {
 
     .todo-container {

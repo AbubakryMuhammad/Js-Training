@@ -12,7 +12,6 @@ let filterButtons = document.querySelectorAll(".filter");
 // Store tasks
 let tasks = [];
 
-
 // Add a new task
 function addTask() {
 
