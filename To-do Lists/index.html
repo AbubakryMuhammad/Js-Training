@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Todo List</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="todo-container">
+
+        <h1>MY TO-DO LISTS</h1>
+        <p class="subtitle">Stay organized and get things done.</p>
+
+        <!-- Add Task -->
+        <div class="input-section">
+            <input
+                type="text"
+                id="taskInput"
+                placeholder="What do you need to do?"
+            >
+
+            <button id="addBtn">Add Task</button>
+        </div>
+
+        <!-- Task Statistics -->
+        <div class="stats">
+            <span>Total: <strong id="totalTasks">0</strong></span>
+            <span>Completed: <strong id="completedTasks">0</strong></span>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <button class="filter active" data-filter="all">All</button>
+            <button class="filter" data-filter="active">Active</button>
+            <button class="filter" data-filter="completed">Completed</button>
+        </div>
+
+        <!-- Todo List -->
+        <ul id="todoList"></ul>
+
+        <!-- Clear Button -->
+        <button id="clearBtn" class="clear-btn">
+            Clear All Tasks
+        </button>
+
+    </div>
+
+    <script src="to-do.js"></script>
+
+</body>
+</html>
