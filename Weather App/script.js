@@ -506,7 +506,6 @@ async function loadWeather() {
   }
 }
 
-
 function init() {
   const cached = loadReading();
 
