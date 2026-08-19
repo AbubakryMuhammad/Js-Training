@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather App — Lagos &amp; Abuja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#0A1826;
+    --card:#102A3F;
+    --card-2:#0D2233;
+    --line:#1E4260;
+    --chart:#E8EEF4;
+    --muted:#7BA3C4;
+    --amber:#F0B429;
+    --alert:#E4572E;
+    --wash:transparent;
+    --gap:14px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  body{
+    background:var(--ink);
+    color:var(--chart);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    line-height:1.5;
+    min-height:100vh;
+    padding:clamp(1rem,2.5vw,1.75rem);
+    position:relative;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;
+    background:var(--wash);
+    pointer-events:none;
+    transition:background 900ms ease;
+    z-index:0;
+  }
+  .shell{position:relative;z-index:1;max-width:1240px;margin:0 auto;}
+
+  /* ---------------- Top bar ---------------- */
+  .bar{
+    display:flex;flex-wrap:wrap;gap:1rem;
+    align-items:flex-end;justify-content:space-between;
+    padding-bottom:1rem;margin-bottom:var(--gap);
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.68rem;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--amber);
+  }
+  h1{
+    font-family:"IBM Plex Sans Condensed",sans-serif;
+    font-weight:700;font-size:clamp(1.9rem,4.5vw,2.9rem);
+    line-height:1;letter-spacing:-.02em;margin-top:.3rem;
+  }
+  h1 em{font-style:normal;color:var(--muted);}
+  .bar-right{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;}
+  #status{
+    font-family:"IBM Plex Mono",monospace;font-size:.75rem;
+    color:var(--muted);display:flex;align-items:center;gap:.5rem;
+  }
+  #status::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--muted);flex:none;}
+  #status.is-live::before{background:var(--amber);}
+  #status.is-loading::before{background:var(--amber);animation:pulse 1s ease-in-out infinite;}
+  #status.is-error{color:var(--alert);}
+  #status.is-error::before{background:var(--alert);}
+  @keyframes pulse{50%{opacity:.2;}}
+
+  #refresh{
+    font-family:"IBM Plex Mono",monospace;font-size:.74rem;
+    letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink);background:var(--amber);border:0;
+    padding:.65rem 1.2rem;cursor:pointer;
+    transition:opacity 160ms ease,transform 160ms ease;
+  }
+  #refresh:hover:not(:disabled){transform:translateY(-1px);}
+  #refresh:disabled{opacity:.35;cursor:not-allowed;}
+  #refresh:focus-visible{outline:2px solid var(--chart);outline-offset:3px;}
+
+  
+  .grid{
+    display:grid;gap:var(--gap);
+    grid-template-columns:repeat(4,1fr);
+    grid-template-areas:
+      "now now plot wind"
+      "now now plot humid"
+      "sun feels abuja abuja"
+      "week week week week"
+      "curve curve curve curve";
+  }
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    padding:1.15rem 1.25rem;
+    display:flex;flex-direction:column;
+    min-width:0;
+  }
+  .card.is-stale{opacity:.5;}
+  .label{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.64rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted);
+    margin-bottom:.75rem;flex:none;
+  }
+  .val{font-family:"IBM Plex Mono",monospace;font-size:1.5rem;font-weight:600;line-height:1;letter-spacing:-.01em;}
+  .val small{font-size:.8rem;color:var(--muted);font-weight:400;letter-spacing:0;}
+  .sub{font-size:.75rem;color:var(--muted);margin-top:.4rem;}
+
+
+  .now{grid-area:now;background:var(--card-2);justify-content:space-between;gap:1rem;}
+  .now-temp{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:clamp(3.6rem,9vw,5.6rem);
+    font-weight:600;line-height:.9;letter-spacing:-.04em;
+  }
+  .now-temp span{font-size:.32em;color:var(--muted);font-weight:400;letter-spacing:0;}
+  .now-cond{
+    font-family:"IBM Plex Sans Condensed",sans-serif;
+    font-weight:600;font-size:1.5rem;margin-top:.5rem;
+  }
+  .now-place{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;}
+  .now-place h2{font-family:"IBM Plex Sans Condensed",sans-serif;font-weight:700;font-size:1.4rem;}
+  .now-place p{font-family:"IBM Plex Mono",monospace;font-size:.68rem;color:var(--muted);letter-spacing:.06em;}
+
+
+  .plot-card{grid-area:plot;align-items:center;text-align:center;}
+  .plot{width:100%;max-width:150px;aspect-ratio:1;margin:auto 0;}
+  .plot svg{width:100%;height:100%;display:block;overflow:visible;}
+  .plot-note{font-size:.68rem;color:var(--muted);margin-top:.9rem;line-height:1.4;}
+
+  .wind{grid-area:wind;}
+  .humid{grid-area:humid;}
+  .sun{grid-area:sun;}
+  .feels{grid-area:feels;}
+  .abuja{grid-area:abuja;}
+  .week{grid-area:week;}
+  .curve{grid-area:curve;}
+
+  
+  .meter{height:4px;background:var(--line);margin-top:.7rem;overflow:hidden;}
+  .meter i{display:block;height:100%;background:var(--amber);width:0;transition:width 700ms ease;}
+
+  
+  .sun-arc{width:100%;height:56px;margin-top:auto;}
+  .sun-arc svg{width:100%;height:100%;overflow:visible;}
+  .sun-times{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--muted);margin-top:.35rem;}
+
+  
+  .abuja-row{display:flex;align-items:center;gap:1.3rem;flex-wrap:wrap;margin-top:auto;}
+  .abuja-row .val{font-size:2.2rem;}
+  .abuja-mini{width:66px;height:66px;flex:none;}
+  .abuja-mini svg{width:100%;height:100%;overflow:visible;}
+
+
+  .week-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+  .day{
+    padding:.8rem .4rem;text-align:center;
+    border-left:1px solid var(--line);
+    display:flex;flex-direction:column;gap:.35rem;align-items:center;
+  }
+  .day:first-child{border-left:0;}
+  .day.is-today{background:rgba(240,180,41,.09);}
+  .day-name{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+  .day-icon{font-size:1.15rem;line-height:1;}
+  .day-max{font-family:"IBM Plex Mono",monospace;font-size:1rem;font-weight:600;}
+  .day-min{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted);}
+
+
+  .curve-wrap{width:100%;height:120px;}
+  .curve-wrap svg{width:100%;height:100%;overflow:visible;}
+  .curve-axis{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:.66rem;color:var(--muted);margin-top:.4rem;}
+
+  footer{
+    margin-top:var(--gap);padding-top:.9rem;
+    border-top:1px solid var(--line);
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.66rem;color:var(--muted);letter-spacing:.04em;
+  }
+
+  
+  @media (max-width:768px){
+    .grid{
+      grid-template-columns:repeat(2,1fr);
+      grid-template-areas:
+        "now now"
+        "plot wind"
+        "plot humid"
+        "sun feels"
+        "abuja abuja"
+        "week week"
+        "curve curve";
+    }
+  }
+  @media (max-width:768px){
+    .grid{
+      grid-template-columns:1fr;
+      grid-template-areas:"now" "plot" "wind" "humid" "feels" "sun" "abuja" "week" "curve";
+    }
+    .week-strip{grid-template-columns:repeat(4,1fr);gap:1px;}
+    .day:nth-child(5){border-left:0;}
+    .bar{flex-direction:column;align-items:stretch;}
+    .bar-right{justify-content:space-between;}
+    #refresh{flex:1;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before{animation:none!important;transition:none!important;}
+  }
+</style>
+
+</head>
+
+<body>
+<div class="shell">
+
+  <div class="bar">
+    <div>
+      <p class="eyebrow">Weather App</p>
+      <h1>Lagos <em>&amp;</em> Abuja</h1>
+    </div>
+    <div class="bar-right">
+      <p id="status" role="status" aria-live="polite">Starting up</p>
+      <button id="refresh" type="button">Refresh weather</button>
+    </div>
+  </div>
+
+  <main class="grid">
+
+    <section class="card now" data-card>
+      <div class="now-place">
+        <h2>Lagos</h2>
+        <p>6.52&deg;N&nbsp; 3.38&deg;E</p>
+      </div>
+      <div>
+        <p class="now-temp" data-f="temp">&mdash;<span>&deg;C</span></p>
+        <p class="now-cond" data-f="cond">&mdash;</p>
+      </div>
+      <p class="sub" data-f="obs">Waiting for data</p>
+    </section>
+
+    <section class="card plot-card" data-card>
+      <p class="label">Station plot</p>
+      <div class="plot" data-f="plot" aria-hidden="true"></div>
+      <p class="plot-note">
+        Circle shows cloud cover. Staff points into the wind. Full barb 10&nbsp;kt, half 5, pennant 50.
+      </p>
+    </section>
+
+    <section class="card wind" data-card>
+      <p class="label">Wind</p>
+      <p class="val" data-f="wind">&mdash;<small> km/h</small></p>
+      <p class="sub" data-f="winddir">&mdash;</p>
+    </section>
+
+    <section class="card humid" data-card>
+      <p class="label">Humidity</p>
+      <p class="val" data-f="humidity">&mdash;<small>%</small></p>
+      <div class="meter"><i data-f="humidity-bar"></i></div>
+    </section>
+
+    <section class="card sun" data-card>
+      <p class="label">Sunrise &amp; sunset</p>
+      <div class="sun-arc" data-f="sunarc" aria-hidden="true"></div>
+      <div class="sun-times">
+        <span data-f="sunrise">&mdash;</span>
+        <span data-f="sunset">&mdash;</span>
+      </div>
+    </section>
+
+    <section class="card feels" data-card>
+      <p class="label">Feels like</p>
+      <p class="val" data-f="feels">&mdash;<small>&deg;C</small></p>
+      <p class="sub" data-f="feels-note">&mdash;</p>
+    </section>
+
+    <section class="card abuja" data-card>
+      <p class="label">Abuja &middot; 9.08&deg;N 7.40&deg;E</p>
+      <div class="abuja-row">
+        <div class="abuja-mini" data-f="abuja-plot" aria-hidden="true"></div>
+        <div>
+          <p class="val" data-f="abuja-temp">&mdash;<small>&deg;C</small></p>
+          <p class="sub" data-f="abuja-cond">&mdash;</p>
+        </div>
+        <div>
+          <p class="val" style="font-size:1.15rem" data-f="abuja-wind">&mdash;<small> km/h</small></p>
+          <p class="sub">Wind</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card week" data-card>
+      <p class="label">Next seven days &middot; Lagos</p>
+      <div class="week-strip" data-f="week"></div>
+    </section>
+
+    <section class="card curve" data-card>
+      <p class="label">Temperature &middot; next 24 hours &middot; Lagos</p>
+      <div class="curve-wrap" data-f="curve" aria-hidden="true"></div>
+      <div class="curve-axis">
+        <span data-f="curve-start">&mdash;</span>
+        <span data-f="curve-mid">&mdash;</span>
+        <span data-f="curve-end">&mdash;</span>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    Data: Open-Meteo &middot; No API key required &middot; Wind converted at 1 kt = 1.852 km/h &middot; Last reading cached locally
+  </footer>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
